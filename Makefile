@@ -6,6 +6,9 @@ EXAMPLES_DIR = examples
 SOURCES = $(wildcard $(EXAMPLES_DIR)/*.c)
 BINS = $(SOURCES:.c=)
 	BINS_STRIPPED = $(SOURCES:.c=_stripped)
+#SOURCES_VALID = $(wildcard $(EXAMPLES_DIR)/*_valid.c)
+SOURCES_VALID = $(shell ls $(EXAMPLES_DIR)/*_valid.c)
+BINS_VALID = $(SOURCES_VALID:.c=)
 CHECKMAKE=go run github.com/checkmake/checkmake/cmd/checkmake@latest
 
 
@@ -39,5 +42,9 @@ checkmake: ## lint the Makefile with checkmake.
 .PHONY: check
 check: checkmake
 
+.PHONY: run.examples.valid
+run.examples.valid: $(BINS_VALID)
+	@for cmd in $(BINS_VALID); do $$cmd ;  done
+
 .PHONY: test
-test: all check
+test: clean all check run.examples.valid
