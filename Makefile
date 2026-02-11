@@ -40,4 +40,4 @@ checkmake: ## lint the Makefile with checkmake.
 check: checkmake
 
 .PHONY: test
-test: check
+test: all check
