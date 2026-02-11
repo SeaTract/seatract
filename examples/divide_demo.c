@@ -26,7 +26,7 @@ float divide(int a, int b) {
 int main() {
     printf("Result of 10 / 2: %.2f\n", divide(10, 2));
 
-    // This call would trigger a contract violation in seatract
+    // This call triggers a contract violation in seatract
     printf("Result of 10 / 0: %.2f\n", divide(10, 0));
 
     return 0;
