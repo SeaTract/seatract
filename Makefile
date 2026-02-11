@@ -11,7 +11,7 @@ CHECKMAKE=go run github.com/checkmake/checkmake/cmd/checkmake@latest
 .PHONY: all
 all:$(BINS)
 
-$(EXAMPLES_DIR)/%: $(EXAMPLES_DIR)/%.c
+$(EXAMPLES_DIR)/%: $(EXAMPLES_DIR)/%.c Makefile
 	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean
