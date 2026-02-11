@@ -9,7 +9,10 @@ CHECKMAKE=go run github.com/checkmake/checkmake/cmd/checkmake@latest
 
 
 .PHONY: all
-all:$(BINS)
+all: build
+.PHONY: build
+build: examples
+examples:$(BINS)
 
 $(EXAMPLES_DIR)/%: $(EXAMPLES_DIR)/%.c Makefile
 	$(CC) $(CFLAGS) $< -o $@
