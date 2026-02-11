@@ -30,7 +30,7 @@ $(EXAMPLES_DIR)/%: $(EXAMPLES_DIR)/%.c Makefile
 
 .PHONY: clean
 clean:
-	rm -f $(BINS)
+	rm -f $(BINS) $(BINS_STRIPPED)
 
 .PHONY: makeckmake
 checkmake: ## lint the Makefile with checkmake.
