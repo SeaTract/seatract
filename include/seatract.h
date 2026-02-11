@@ -27,8 +27,8 @@ It adds useful context to the error output.
 			fprintf(stderr, "SEATRACT VIOLATION [%s]: '%s' failed in %s (%s:%d)\n", \
 				type, #cond, __func__, __FILE__, __LINE__); \
 		 abort(); \
-		} \
-	while (0)
+	} \
+	}while (0)
 
 #define Require(cond) CONTRACT_ASSERT(cond, "Precondition")
 #define Ensure(cond)  CONTRACT_ASSERT(cond, "Postcondition")
