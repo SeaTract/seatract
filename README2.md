@@ -1,6 +1,6 @@
 # seatract
 
-**seatract** is a lightweight Design by Contract (DbC) framework for C, inspired by the [gontract](https://github.com/gontract/gontract) project. It aims to bridge the "Procedural Gap" in C development by providing explicit mechanisms for preconditions, postconditions, and invariants.
+**seatract** is a lightweight Design by Contract (DbC) framework for C, inspired by the [gontract](https://github.com/gontract/gontract) project. It aims to bridge the "Procedural Gap" in C development by providing explicit mechanisms for preconditions (`Require`) and postconditions (`Ensure`).
 
 ## Core Pillars
 * **Contract Decoupling:** Separating safety logic from business logic.
