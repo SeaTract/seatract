@@ -1,4 +1,4 @@
-name: CI
+name: CI matrix
 on:
 
   push:
@@ -15,9 +15,13 @@ jobs:
 
   build:
     name: build and check
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
     steps:
 
     - name: Set up Go (needed for checkmake)
