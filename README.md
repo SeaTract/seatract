@@ -1,8 +1,8 @@
-# seatract
 
 [![Build Status](https://github.com/SeaTract/seatract/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SeaTract/seatract/actions)
 [![GPL license](https://img.shields.io/badge/license-GPL-blue.svg)](http://opensource.org/licenses/GPL)
 
+# seatract
 
 **seatract** is a lightweight Design by Contract (DbC) framework for C, inspired by the [gontract](https://github.com/gontract/gontract) project. It aims to bridge the "Procedural Gap" in C development by providing explicit mechanisms for preconditions (`Require`) and postconditions (`Ensure`).
 
