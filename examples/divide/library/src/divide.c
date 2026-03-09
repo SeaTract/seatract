@@ -3,6 +3,7 @@
  */
 #include "seatract.h"
 #include "divide.h"
+#include <math.h>
 
 /**
  * @brief Divides two integers.
@@ -19,8 +20,9 @@ float divide(int a, int b) {
 
     // --- Postconditions ---
     // Ensure the function performed as expected before returning
-    // Note: Using a small epsilon for float comparison
-    Ensure(result * b == (float)a);
+    // Use a relative epsilon for float comparison to handle rounding errors
+    // across the full range of integer inputs, including a == 0
+    Ensure(fabsf(result * (float)b - (float)a) < 1e-5f * (fabsf((float)a) + 1.0f));
 
     return result;
 }
