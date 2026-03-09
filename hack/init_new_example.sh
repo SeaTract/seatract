@@ -11,17 +11,15 @@ has_forbidden_chars() {
 	local input="$1"
 
 	# Define the pattern in a variable (no extra quotes inside the brackets)
-# This matches: any whitespace, a literal backslash, or a literal dot
-forbidden_pattern='[[:space:]\\.]'
+	# This matches: any whitespace, a literal backslash, or a literal dot
+	local forbidden_pattern='[[:space:]\\.]'
 
 	# The regex checks for whitespace, backslash, or dot
 	# We use [[:space:]] to catch tabs and newlines as well
-	if [[ "${input}" =~ ${forbidden_pattern} ]]
-       then
-		return 1
+	if [[ "${input}" =~ ${forbidden_pattern} ]]; then
+		return 0
 	fi
-return 0
-
+	return 1
 }
 
 name_is_valid() {
