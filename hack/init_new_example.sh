@@ -32,7 +32,7 @@ name_is_valid() {
 		return 1
 	elif has_forbidden_chars "${name}"
 	then
-		echo "Name contains forbidden characters (whitespace,/,\, '.')."
+		echo "Name '${name}' contains forbidden characters (whitespace,/,\, '.')."
 		return 1
 	fi
 	return 0
@@ -138,14 +138,24 @@ echo "finished file 1 (${file})."
 
 file="${LIB}/include/${NAME}.h"
 echo "starting file 2 (${file})."
-# Create template header for library
+# Create template header for the example library
 cat <<EOF2 > "${file}"
 /*
  * module providing ${NAME}
  */
 
 #ifndef SEATRACT_EXAMPLE_LIB${UCNAME}_${UCNAME}_H
-#define  SEATRACT_EXAMPLE_LIB${UCNAME}_${UCNAME}_H
+#define SEATRACT_EXAMPLE_LIB${UCNAME}_${UCNAME}_H
+
+#include <stdbool.h>
+
+/* type definitions and
+ * function prototypes for lib${NAME} go here:
+ */
+
+/* example function: */
+void ${NAME}_func(bool true_param, bool false_param);
+
 
 
 
@@ -178,13 +188,27 @@ echo "starting file 4 (${file})."
 cat <<EOF4 > "${file}"
 
 /*
- * module providing ${NAME}.
+ * module providing ${NAME}
  */
 
 #include "seatract.h"
 #include "${NAME}.h"
+#include <stdbool.h>
 
 /* code here... */
+
+void ${NAME}_func(bool true_param, bool false_param) {
+	/* preconditions: */
+	Require(true_param);
+	Require(!false_param);
+
+
+	/* postconditions: */
+	Ensure(true); /* trivially satisfied */
+
+}
+
+
 EOF4
 
 echo "finished file 4 (${file})."
@@ -256,8 +280,15 @@ cat <<EOF6 > "${file}"
  */
 
 #include "${NAME}.h"
+#include <stdbool.h>
+
 
 int main() {
+
+${NAME}_func(true, false);
+${NAME}_func(true, false);
+
+
 
 
 return 0;
@@ -279,8 +310,12 @@ cat <<EOF7 > "${file}"
  */
 
 #include "${NAME}.h"
+#include <stdbool.h>
 
 int main() {
+
+  ${NAME}_func(true, false); /* valid */
+  ${NAME}_func(false, false); /* invalid */
 
 
 return 0;
