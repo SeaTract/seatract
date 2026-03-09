@@ -99,7 +99,7 @@ CFLAGS_USE_LIB${UCNAME} :=  \$(CPPFLAGS_USE_LIB${UCNAME})
 
 
 # 2. Rule to  build the objects (requires seatract include)
-\$(${NAME}_LIB${UCNAME}_OBJ_DIR)/%.o: \$(LIB${UCNAME}_SRC_DIR)/%.c \$(SEATRACT_H) \$(LIB${UCNAME}_HDR) \$(LIB${UCNAME}_OBJ_DIR) \$(${NAME}_LIB_SRC)/%.c
+\$(LIB${UCNAME}_OBJ_DIR)/%.o: \$(LIB${UCNAME}_SRC_DIR)/%.c \$(SEATRACT_H) \$(LIB${UCNAME}_HDR) \$(LIB${UCNAME}_OBJ_DIR)
 		\$(CC) \$(CFLAGS) \$(GLOBAL_CFLAGS) -c \$< -o \$@
 
 \$(LIB${UCNAME}_OBJ_DIR):
