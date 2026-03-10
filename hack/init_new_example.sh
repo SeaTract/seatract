@@ -5,36 +5,60 @@ NAME=$1
 UCNAME="$(echo "${NAME}" | tr '[:lower:]' '[:upper:]' )"
 
 
-# Returns 0 (true) if forbidden chars are found, 1 (false) if clean
+# has_forbidden_chars function:
+# returns 0 (true) if forbidden chars are found, 1 (false) if clean
 
 has_forbidden_chars() {
 	local input="$1"
 
 	# Define the pattern in a variable (no extra quotes inside the brackets)
-	# This matches: any whitespace, a literal backslash, or a literal dot
-	local forbidden_pattern='[[:space:]\\.]'
+	# This matches: any whitespace, a literal backslash, or a literal slash
+local forbidden_chars_pattern='[[:space:]/\\]'
 
-	# The regex checks for whitespace, backslash, or dot
+	# The regex checks for whitespace, backslash, or slash
 	# We use [[:space:]] to catch tabs and newlines as well
-	if [[ "${input}" =~ ${forbidden_pattern} ]]; then
+	if [[ "${input}" =~ $forbidden_chars_pattern ]]
+	then
+		# forbidden characters found
 		return 0
 	fi
+	# input is clean.
 	return 1
+
 }
+
+
+
+
+
 
 name_is_valid() {
 	local name="$1"
-	if [[ -z "${name}" ]]
+
+	# check for explicitly forbidden names (exact matches)
+	case "${name}" in
+		""|" " |"."|"/"|"\\")
+			echo "name is forbidden: '${name}'"
+			# name is invalid
+			return 1 
+			;;
+	esac
+
+	# check for forbidden characters anywhere in the string
+	if has_forbidden_chars "${name}"
 	then
-		echo "name may not be empty."
-		return 1
-	elif has_forbidden_chars "${name}"
-	then
-		echo "Name contains forbidden characters (whitespace,/,\, '.')."
+		echo "Name contains forbidden characters (whitespace, /, \\)."
+		# name is invalid.
 		return 1
 	fi
+	# name is valid.
 	return 0
 }
+
+
+
+
+
 
 
 if ! name_is_valid "${NAME}"
@@ -136,14 +160,24 @@ echo "finished file 1 (${file})."
 
 file="${LIB}/include/${NAME}.h"
 echo "starting file 2 (${file})."
-# Create template header for library
+# Create template header for the example library
 cat <<EOF2 > "${file}"
 /*
  * module providing ${NAME}
  */
 
 #ifndef SEATRACT_EXAMPLE_LIB${UCNAME}_${UCNAME}_H
-#define  SEATRACT_EXAMPLE_LIB${UCNAME}_${UCNAME}_H
+#define SEATRACT_EXAMPLE_LIB${UCNAME}_${UCNAME}_H
+
+#include <stdbool.h>
+
+/* type definitions and
+ * function prototypes for lib${NAME} go here:
+ */
+
+/* example function: */
+void ${NAME}_func(bool true_param, bool false_param);
+
 
 
 
@@ -176,13 +210,27 @@ echo "starting file 4 (${file})."
 cat <<EOF4 > "${file}"
 
 /*
- * module providing ${NAME}.
+ * module providing ${NAME}
  */
 
 #include "seatract.h"
 #include "${NAME}.h"
+#include <stdbool.h>
 
 /* code here... */
+
+void ${NAME}_func(bool true_param, bool false_param) {
+	/* preconditions: */
+	Require(true_param);
+	Require(!false_param);
+
+
+	/* postconditions: */
+	Ensure(true); /* trivially satisfied */
+
+}
+
+
 EOF4
 
 echo "finished file 4 (${file})."
@@ -200,7 +248,6 @@ ${UCNAME}_DEMO_BIN_VALID := \$(${UCNAME}_DEMO_BIN_DIR)/${NAME}_demo_valid
 
 # # find all .c files in demo/src and plan their output in demo/bin/
 ${UCNAME}_DEMO_SOURCES := \$(wildcard \$(${UCNAME}_DEMO_SRC_DIR)/*.c)
-${UCNAME}_DEMO_BASE_NAMES := \$(foreach src,\$(${UCNAME}_DEMO_SOURCES),\$(basename \$(notdir \$(src))))
 ${UCNAME}_DEMO_BINS  := \$(patsubst \$(${UCNAME}_DEMO_SRC_DIR)/%.c, \$(${UCNAME}_DEMO_BIN_DIR)/${NAME}_demo_%, \$(${UCNAME}_DEMO_SOURCES))
 
 # 1. Set flags for the demo: use pkg-config if the local .pc is available, else fall back to manual flags
@@ -221,8 +268,8 @@ endif
 # Rule: Build demos (links against example library)
 # note that the CC command directly references the static library file to avoid linker issues.
 # the dependencies include the phony library build target as the library file dep did not work.
-\$(${UCNAME}_DEMO_BIN_DIR)/${NAME}_demo_%: \$(${UCNAME}_DEMO_SRC)/%.c lib${NAME} \$(iLIB${UCNAME}_LIB_A) \$(${UCNAME}_DEMO_BIN_DIR)
-\\$(CC) \$(CFLAGS) \$(GLOBAL_CFLAGS) \$(LDFLAGS) \$(LDLIBS) \$< \$(LIB${UCNAME}_LIB_A) -o \$@
+\$(${UCNAME}_DEMO_BIN_DIR)/${NAME}_demo_%: \$(${UCNAME}_DEMO_SRC_DIR)/%.c lib${NAME} \$(LIB${UCNAME}_LIB_A) \$(${UCNAME}_DEMO_BIN_DIR)
+	\$(CC) \$(CFLAGS) \$(GLOBAL_CFLAGS) \$(LDFLAGS) \$(LDLIBS) \$< \$(LIB${UCNAME}_LIB_A) -o \$@
 
 \$(${UCNAME}_DEMO_BIN_DIR):
 		@mkdir -p \$@
@@ -254,8 +301,15 @@ cat <<EOF6 > "${file}"
  */
 
 #include "${NAME}.h"
+#include <stdbool.h>
+
 
 int main() {
+
+${NAME}_func(true, false);
+${NAME}_func(true, false);
+
+
 
 
 return 0;
@@ -277,8 +331,12 @@ cat <<EOF7 > "${file}"
  */
 
 #include "${NAME}.h"
+#include <stdbool.h>
 
 int main() {
+
+  ${NAME}_func(true, false); /* valid */
+  ${NAME}_func(false, false); /* invalid */
 
 
 return 0;
