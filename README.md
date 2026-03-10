@@ -77,9 +77,3 @@ seatract is licensed under the GNU Lesser General Public License v3.0 or later (
 
 This allows seatract to be used in projects with more permissive licenses (like Apache 2.0 or MIT) 
 while ensuring that any improvements to seatract itself remain open source.
-
-
-
-
-
-
