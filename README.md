@@ -1,6 +1,6 @@
 
 [![Build Status](https://github.com/SeaTract/seatract/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SeaTract/seatract/actions)
-[![GPL license](https://img.shields.io/badge/license-GPL-blue.svg)](http://opensource.org/licenses/GPL)
+[![LGPL-3.0-or-later license](https://img.shields.io/badge/license-LGPL-blue.svg)](https://opensource.org/licenses/LGPL-3.0)
 
 # seatract
 
@@ -70,3 +70,16 @@ pkg-config --libs   libarray
 ```
 
 The demo builds use `pkg-config` automatically when the `.pc` file is present, and fall back to manual flags otherwise, so the build always works regardless of build order.
+
+## License
+
+seatract is licensed under the GNU Lesser General Public License v3.0 or later (LGPL-3.0-or-later). 
+
+This allows seatract to be used in projects with more permissive licenses (like Apache 2.0 or MIT) 
+while ensuring that any improvements to seatract itself remain open source.
+
+
+
+
+
+
